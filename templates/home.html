@@ -14,8 +14,7 @@
 </head>
 
 <body>
-    <form action="" method="POST">
-    {% csrf_token %}
+
     <h1 class="ui header">Home</h1>
     <div class="ui fixed borderless huge menu">
         <div class="ui container grid">
@@ -36,11 +35,13 @@
 
                         <div class="field">
                             <div class="ui search">
+                                <form action="" method="POST">
+                                {% csrf_token %}
                                 <div class="ui action input">
-
-                                    <input type="text" placeholder="Search rooms..." name="room" maxlength="100">
+                                    {{ form.room }}
                                     <input type="submit" name="join" value="Join" class="ui primary button">
                                 </div>
+                                </form>
                                 <div class="results"></div>
                             </div>
                         </div>
@@ -51,13 +52,15 @@
                             <i class="users icon"></i>
                             Create a New Room
                         </div>
-                        <input type="submit" name="create" class="fluid ui primary button" value="Create">
+                        <form action="" method="POST">
+                            {% csrf_token %}
+                            <input type="submit" name="create" class="fluid ui primary button" value="Create">
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    </form>
 </body>
 
 </html>

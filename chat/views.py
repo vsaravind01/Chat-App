@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from .forms import RoomSearch
 from django.http import HttpResponse
 
 def home(request):
@@ -6,5 +7,7 @@ def home(request):
         if request.POST.get('create', 'join') == "Create":
             return render(request, 'create_room.html')
         else:
+            print()
             return render(request, 'room.html', {'room': request.POST.get('room')})
-    return render(request, 'home.html')
+    form = RoomSearch()
+    return render(request, 'home.html', {'form': form})
