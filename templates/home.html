@@ -1,0 +1,63 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'semantic/dist/semantic.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'custom/style.css' %}">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="{% static 'semantic/dist/semantic.min.js' %}"></script>
+</head>
+
+<body>
+    <form action="" method="POST">
+    {% csrf_token %}
+    <h1 class="ui header">Home</h1>
+    <div class="ui fixed borderless huge menu">
+        <div class="ui container grid">
+            <div class="computer only row">
+                <a class="header ui middle aligned grid item">Chat &nbsp; <i class="paper plane icon"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="center-screen">
+        <div class="ui placeholder container segment">
+            <div class="ui two column stackable center aligned grid">
+                <div class="ui middle aligned row">
+                    <div class="column">
+                        <div class="ui icon header">
+                            <i class="search icon"></i>
+                            Join a Room
+                        </div>
+
+                        <div class="field">
+                            <div class="ui search">
+                                <div class="ui action input">
+
+                                    <input type="text" placeholder="Search rooms..." name="room" maxlength="100">
+                                    <input type="submit" name="join" value="Join" class="ui primary button">
+                                </div>
+                                <div class="results"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui vertical divider">or</div>
+                    <div class="column">
+                        <div class="ui icon header">
+                            <i class="users icon"></i>
+                            Create a New Room
+                        </div>
+                        <input type="submit" name="create" class="fluid ui primary button" value="Create">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+</body>
+
+</html>
