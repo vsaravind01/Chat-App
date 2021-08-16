@@ -1,10 +1,50 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Create Room</title>
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'semantic/dist/semantic.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'custom/style.css' %}">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="{% static 'semantic/dist/semantic.min.js' %}"></script>
 </head>
 <body>
+{% if messages %}
+<ul>
+   {% for message in messages %}
+	   <li>{{ message }}</li>
+   {% endfor %}
+</ul>
+{% endif %}
+    {% if error != " "%}
+        <h1>{{ error }}</h1>
+    {% endif %}
     <h1>Create Room</h1>
+    <div class="container">
+        <div class="ui placeholder segment">
+            <div class="ui form">
+                <div class="field">
+                    <label>Room name</label>
+                    {{ form.room }}
+                </div>
+                <div class="field">
+                    <label>Username</label>
+                    {{ form.admin }}
+                </div>
+                <div class="ui blue submit button">Create</div>
+            </div>
+        </div>
+    </div>
+    <form action="{% url 'check' %}" method="POST">
+        {% csrf_token %}
+        <input type="text" id="name" name="name">
+        <label for="name">Room Name</label>
+        <input type="text" id="username" name="username">
+        <label for="username">username</label>
+        <button type="submit">submit</button>
+    </form>
 </body>
 </html>
