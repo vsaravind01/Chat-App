@@ -11,7 +11,7 @@ Insta-Chat is a room based chatting app, where our registered users can create a
 - Robust user authentication system
 - Clean and rich UI/UX
 - Responsive user interface
-- Redis channel inclusion
+- Redis layer
 - Realtime chatting experience
 - ASGI mode enabled
 - Data encryption of user data
