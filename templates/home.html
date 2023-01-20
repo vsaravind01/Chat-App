@@ -1,29 +1,26 @@
-{% load static %}
+{% extends 'base.html' %}
 
-<!DOCTYPE html>
-<html lang="en">
+{% block title %}
+    Home
+{% endblock %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'semantic/dist/semantic.min.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'custom/style.css' %}">
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
-        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
-    <script src="{% static 'semantic/dist/semantic.min.js' %}"></script>
-</head>
-
-<body>
-
-    <h1 class="ui header">Home</h1>
-    <div class="ui fixed borderless huge menu">
-        <div class="ui container grid">
-            <div class="computer only row">
-                <a class="header ui middle aligned grid item">Chat &nbsp; <i class="paper plane icon"></i></a>
-            </div>
-        </div>
-    </div>
+{% block content %}
     <div class="center-screen">
+        {% if errors %}
+            <div class="ui negative message">
+                <i class="close icon"></i>
+                <div class="header">
+                    Please verify the following!
+                </div>
+                <ul class="list">
+                    {% for error in errors %}
+                        <li class="content">
+                            {{ error }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
         <div class="ui placeholder container segment">
             <div class="ui two column stackable center aligned grid">
                 <div class="ui middle aligned row">
@@ -61,6 +58,4 @@
             </div>
         </div>
     </div>
-</body>
-
-</html>
+{% endblock %}

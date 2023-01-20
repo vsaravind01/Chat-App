@@ -1,18 +1,133 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Room</title>
-</head>
-<body>
-{% if messages %}
-<ul>
-   {% for message in messages %}
-	   <li>{{ message }}</li>
-   {% endfor %}
-</ul>
-{% endif %}
-    <h1>Room : {{ room }}</h1>
-    <h1>Room name : {{ room }}</h1>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}
+    Room
+{% endblock %}
+
+{% block content %}
+    <div class="padded center">
+        <div class="placeholder ui segment comments" style="margin: 20px">
+            <h3 class="ui dividing header">{{ room.name }}</h3>
+            <div id="msg-container">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="comment">
+                        <a class="avatar">
+                            <img src="https://api.dicebear.com/5.x/identicon/svg?backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf,000000&seed={{ message.user }}" alt="{{ message.user|slice:":2" }}">
+                        </a>
+                        <div class="content">
+                            <a class="author">
+                                {{ message.user }}
+                            </a>
+                            <div class="metadata">
+                                <span class="date">{{ message.date|date:"N jS, P" }}</span>
+                            </div>
+                            <div class="text">
+                                {{ message.msg }}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            </div>
+            <div>
+                <div class="ui fluid action input">
+                    <input type="text" id="message-box" placeholder="Type here...">
+                    <button id="message-submit" class="ui black button">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block end_script %}
+    <script>
+        const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/chat/'
+            + '{{ room.name }}'
+            + '/'
+        );
+
+        const months = [
+          'Jan',
+          'Feb',
+          'March',
+          'April',
+          'May',
+          'June',
+          'July',
+          'Aug',
+          'Sep',
+          'Oct',
+          'Nov',
+          'Dec'
+        ]
+
+        const nth = function(d) {
+          if (d > 3 && d < 21) return 'th';
+          switch (d % 10) {
+            case 1:  return "st";
+            case 2:  return "nd";
+            case 3:  return "rd";
+            default: return "th";
+          }
+        }
+
+
+        chatSocket.onmessage = function (e) {
+            const data = JSON.parse(e.data);
+            const datetime = new Date();
+            const month = months[datetime.getMonth()];
+            const date = datetime.getDate();
+            const hours = datetime.getHours() % 12 || 12;
+            const minutes = datetime.getMinutes();
+            const newFormat = hours >= 12 ? 'a.m.' : 'p.m.';
+
+            const finalDate = `${month}. ${date}${nth(date)}, ${hours}:${minutes} ${newFormat}`
+
+            console.log(datetime);
+            $("#msg-container").append(
+                `<div class="comment">
+                    <a class="avatar">
+                        <img src="https://api.dicebear.com/5.x/identicon/svg?backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf,000000&seed=${data.user}" alt="${data.user.slice(0,2)}">
+                    </a>
+                    <div class="content">
+                        <a class="author">
+                            ${data.user}
+                        </a>
+                        <div class="metadata">
+                            <span class="date">${finalDate}</span>
+                        </div>
+                        <div class="text">
+                            ${data.message}
+                        </div>
+                    </div>
+                </div>`
+            );
+        }
+
+        chatSocket.onclose = function(e) {
+            console.log(e);
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        document.querySelector('#message-box').focus();
+        document.querySelector('#message-box').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#message-submit').click();
+            }
+        };
+
+        document.querySelector('#message-submit').onclick = function(e) {
+            const messageInputDom = document.querySelector('#message-box');
+            const message = messageInputDom.value;
+            chatSocket.send(JSON.stringify({
+                'message': message
+            }));
+            messageInputDom.value = '';
+        };
+
+    </script>
+{% endblock %}

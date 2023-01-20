@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Sign up
+{% endblock %}
+
+
+{% block content %}
+<div class="container center-screen">
+	<h1>Sign up</h1>
+    {% if errors %}
+        <div class="ui negative message">
+            <i class="close icon"></i>
+            <div class="header">
+                Please verify the following!
+            </div>
+            <ul class="list">
+                {% for error in errors %}
+                    <li class="content">
+                        {{ error }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+	<div class="ui very padded placeholder segment">
+		<div class="ui form">
+			<form onsubmit="return validatePassword()" action="" method="POST" name="registration">
+				{% csrf_token %}
+				<div id="username" class="field">
+					<label>Username</label>
+					{{ form.username }}
+				</div>
+				<div id="password" class="field">
+					<label>Password</label>
+					{{ form.password }}
+				</div>
+				<div id="confirm password" class="field">
+					<label>Confirm Password</label>
+					{{ form.confirm_password }}
+				</div>
+
+				<input
+					type="submit"
+					name="join"
+					value="Join"
+					class="ui fluid primary button"
+				/>
+			</form>
+			<div class="results"></div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block end_script %}
+    <script>
+        const password = document.registration.password;
+        const confirm_password = document.registration.confirm_password;
+
+        function validatePassword() {
+            if(password.value !== confirm_password.value) {
+                password.setCustomValidity("Password confirmation do not match");
+                return false;
+            } else {
+                password.setCustomValidity("");
+                return true;
+            }
+        }
+    </script>
+{% endblock %}
